@@ -82,10 +82,22 @@ async function scrape() {
     console.log('English dua not found');
   }
 
-  let benefits = await page.evaluate(() => {
-  // Get the outerHTML of the h3 tag
-  return document.querySelector('.section.mb_25 h3').outerHTML;
-});
+    
+    
+    let benefits;
+
+try {
+  benefits = await page.evaluate(() => {
+    return document.querySelector('.section.mb_25 h2, .section.mb_25 h3, .section.mb_25 h4').outerHTML;
+  });
+} catch (err) {
+  console.log("Benefits heading not found");
+}
+
+//   let benefits = await page.evaluate(() => {
+//   // Get the outerHTML of the h3 tag
+//   return document.querySelector('.section.mb_25 h3').outerHTML;
+// });
 
 // let description = await page.evaluate(() => {
 //   // Get all p tags and join their text
