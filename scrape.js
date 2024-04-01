@@ -27,13 +27,13 @@ async function scrape() {
   
   for (let link of links) {
     const browser = await puppeteer.launch();
-    console.log(link);
+    // console.log(link);
     
     const page = await browser.newPage();
     await page.goto(link);
     
     await page.waitForSelector('.dua_box');
-    console.log("inside");
+    // console.log("inside");
     
   let titleEnglish;
   try {
@@ -125,25 +125,26 @@ titleEnglish = titleEnglish.replace(/<(.*?)>/g, '');
   // .trim();
   // .replace(/\s+/g, ' ');
   
+    console.log(serialNum, ".", titleEnglish);
   
-  console.log("Title English: ", JSON.stringify(titleEnglish));
-  console.log();
-  console.log("Title Urdu: ", JSON.stringify(titleUrdu));
-  console.log();
+  // console.log("Title English: ", JSON.stringify(titleEnglish));
+  // console.log();
+  // console.log("Title Urdu: ", JSON.stringify(titleUrdu));
+  // console.log();
   
-  console.log("Arabic: ", JSON.stringify(duaArabic)); 
-  console.log();
+  // console.log("Arabic: ", JSON.stringify(duaArabic)); 
+  // console.log();
 
-  console.log("Urdu: ", JSON.stringify(duaUrdu));
-  console.log(); 
+  // console.log("Urdu: ", JSON.stringify(duaUrdu));
+  // console.log(); 
   
-  console.log("English: ", JSON.stringify(duaEnglish));
-  console.log();
+  // console.log("English: ", JSON.stringify(duaEnglish));
+  // console.log();
 
-  console.log("Benefits: ", JSON.stringify(benefits));
-  console.log();
+  // console.log("Benefits: ", JSON.stringify(benefits));
+  // console.log();
 
-  console.log("Description: ", JSON.stringify(description));
+  // console.log("Description: ", JSON.stringify(description));
 
 
   
