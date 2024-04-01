@@ -1,18 +1,16 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
+const { log } = require('console');
 
 async function scrape() {
 
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-
-  await page.goto('https://hamariweb.com/islam/safar_aur_sawari_ki_dua_md58.aspx');
-
-  await page.waitForSelector('.dua_box');
-
-
   
+  const links = fs.readFileSync('links.csv').toString().split('\n');
+  // await page.goto('https://hamariweb.com/islam/safar_aur_sawari_ki_dua_md58.aspx');
+
+  const csvFile = fs.createWriteStream('duas.csv');
   const headers = [
+    'serialNumber',
     'Title English',
     'Title Urdu', 
     'Arabic',
@@ -21,9 +19,22 @@ async function scrape() {
     'Benefits',
     'Description'
   ]
-  
-  
 
+  let csvData = headers.join(",") + "\n";
+
+  console.log("Headers");
+  let serialNum = 1;
+  
+  for (let link of links) {
+    const browser = await puppeteer.launch();
+    console.log(link);
+    
+    const page = await browser.newPage();
+    await page.goto(link);
+    
+    await page.waitForSelector('.dua_box');
+    console.log("inside");
+    
   let titleEnglish;
   try {
       titleEnglish = await page.evaluate(() => {
@@ -115,9 +126,6 @@ titleEnglish = titleEnglish.replace(/<(.*?)>/g, '');
   // .replace(/\s+/g, ' ');
   
   
-  
-  
-
   console.log("Title English: ", JSON.stringify(titleEnglish));
   console.log();
   console.log("Title Urdu: ", JSON.stringify(titleUrdu));
@@ -151,17 +159,30 @@ titleEnglish = titleEnglish.replace(/<(.*?)>/g, '');
   
   // const csvData = headers.join() + "\n" + JSON.stringify(data);
 
-  let csvData = headers.join(",") + "\n";
+  // let csvData = headers.join(",") + "\n";
 
+  csvData += `${serialNum},`; 
+    
   Object.values(data).forEach(field => {
     csvData += `"${field}",`
   })
+    
+    serialNum++;
 
     csvData = csvData.slice(0, -1);
     
 
-  fs.writeFileSync('./duas.csv', csvData);
+  // fs.writeFileSync('./duas.csv', csvData);
+    // fs.writeFileSync(`${link}.csv`, data);
+    
+    csvData += Object.values(data).map(field => `"${field}",`).join("") + "\n";
+    csvFile.write(csvData);
+    csvData = ""; // reset for next link
+
   await browser.close();
+}
+  // fs.writeFileSync('duas.csv', csvData); 
+  csvFile.end();
 
 }
 
