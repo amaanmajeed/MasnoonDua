@@ -100,15 +100,21 @@ titleEnglish = titleEnglish.replace(/<(.*?)>/g, '');
 
 // Remove tags from benefits heading
   benefits = benefits.replace(/<(.*?)>/g, '')
-    .replace(/\n/g, ' ').trim();
+    .replace(/\n/g, ' ').trim().replace(/\s+/g, ' ');
   
   
 
-// Remove tags and whitespace from description 
-description = description.replace(/<(.*?)>/g, '')
-                          .replace(/\n/g, ' ')
-                          .replace(/\s+/g, ' ');
-
+  // Remove tags and whitespace from description 
+  description = description
+  .replace(/^\n/gm, '')
+  .replace(/ +/g, ' ')
+    // .replace(/\n\s\n\s/g, '\n')
+  .replace(/\n\s*\(/g, '(');
+  // .replace(/\n{2,}/g, '\n');
+  // .trim();
+  // .replace(/\s+/g, ' ');
+  
+  
   
   
 
@@ -143,7 +149,17 @@ description = description.replace(/<(.*?)>/g, '')
     description,
   };
   
-  const csvData = headers.join() + "\n" + JSON.stringify(data);
+  // const csvData = headers.join() + "\n" + JSON.stringify(data);
+
+  let csvData = headers.join(",") + "\n";
+
+  Object.values(data).forEach(field => {
+    csvData += `"${field}",`
+  })
+
+    csvData = csvData.slice(0, -1);
+    
+
   fs.writeFileSync('./duas.csv', csvData);
   await browser.close();
 
