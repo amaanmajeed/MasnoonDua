@@ -112,7 +112,6 @@ try {
 
   // Get p tags from last div
   let paragraphs = lastSection.querySelectorAll('p');  
-
   return [...paragraphs].map(p => p.textContent).join(' ');
 
 });
@@ -176,13 +175,13 @@ titleEnglish = titleEnglish.replace(/<(.*?)>/g, '');
 
   csvData += `${serialNum},`; 
     
-  Object.values(data).forEach(field => {
-    csvData += `"${field}",`
-  })
+  // Object.values(data).forEach(field => {
+  //   csvData += `"${field}",`
+  // })
     
     serialNum++;
 
-    csvData = csvData.slice(0, -1);
+    // csvData = csvData.slice(0, -1);
     
 
   // fs.writeFileSync('./duas.csv', csvData);
